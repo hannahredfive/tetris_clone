@@ -2,6 +2,7 @@
 
 #define SDL_MAIN_HANDLED 1
 #include <SDL.h>
+#include "board.h"
 
 
 
@@ -31,9 +32,12 @@ int main(int cpChz, char** apChzArg)
 
 	SDL_ERRCHECK(SDL_Init(SDL_INIT_VIDEO));
 
-	// Create a window with the title 'Hello World' in the center of the screen with dimensions 640x480
+	// Create a window with the title 'Hello World' in the center of the screen with dimensions as defined by width & height
 
-	SDL_Window* pWindow = SDL_CreateWindow("Hello World", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
+	int w_width = 680;
+	int w_height = 480;
+
+	SDL_Window* pWindow = SDL_CreateWindow("Hello World", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, 0);
 	SDL_ASSERT(pWindow);
 
 	// Create an accelerated renderer we can draw to
@@ -41,9 +45,8 @@ int main(int cpChz, char** apChzArg)
 	SDL_Renderer* pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	SDL_ASSERT(pRenderer);
 
-	// Statefully set the color of the next render operation to pink
-
-	SDL_ERRCHECK(SDL_SetRenderDrawColor(pRenderer, 0xFF, 0x00, 0xFF, 0xFF));
+	Board board(w_width, w_height);
+	
 
 	bool fRunWindow = true;
 	while (fRunWindow)
@@ -57,9 +60,16 @@ int main(int cpChz, char** apChzArg)
 				fRunWindow = false;
 		}
 
+		// Statefully set the color of the next render operation to pink
+
+		SDL_ERRCHECK(SDL_SetRenderDrawColor(pRenderer, 0xFF, 0x00, 0xFF, 0xFF));
+
 		// Clear the entire screen to the last set render draw color
 
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
+
+		// Draw board in the window
+		board.Draw(pRenderer);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 
