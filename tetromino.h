@@ -1,14 +1,20 @@
 #pragma once
 #include "SDL2/include/SDL.h"
+#include "InputWomanager.h"
+
+struct Transform
+{
+	int	_x; // top left of object
+	int	_y;
+};
 
 class Tetromino
 {
 public:
 	Tetromino();
 	~Tetromino();
+	void Update(float dT, const InputWomanager* pInputWoman, double t);
 	void Draw(SDL_Renderer*);
-	// Will need a rotate function, which requires me to make an input manager
-	// void Rotate(float dT, const InputWomanager* pInputWoman, double t);
 	
 	// max space a tetronimo can exist in, including rotation
 	static const int s_height = 4;
@@ -28,19 +34,16 @@ private:
 	};
 	*/
 
-	enum orientations
+	enum orientation
 	{
 		left, right, up, down
 	};
 
-	// tiles carries the data for what color each tile of the board is
-	colors tiles[s_height][s_width];
+	// tet_tiles carries the data for what color each tile of the tetromino
+	colors tet_tiles[s_height][s_width];
 
-	// don't think I need these for this class?
-	/*
-	int tile_w;
-	int tile_h;
-	int board_xpos;
-	int board_ypos;
-	*/
+	Transform xfm;
+
+	// NOTE: Collider? I will need a way to prevent it overlapping with other pieces
+
 };
