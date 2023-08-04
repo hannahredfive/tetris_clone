@@ -20,6 +20,8 @@ Board::Board(int window_width, int window_height)
 	tile_h = 20;
 	board_xpos = 240;
 	board_ypos = 40;
+
+	//tiles[0][0] = blue;
 }
 
 Board::~Board()
