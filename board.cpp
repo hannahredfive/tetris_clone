@@ -21,7 +21,14 @@ Board::Board(int window_width, int window_height)
 	board_xpos = 240;
 	board_ypos = 40;
 
-	//tiles[0][0] = blue;
+	// testing colors!
+	tiles[0][0] = blue;
+	tiles[5][8] = cyan;
+	tiles[18][3] = orange;
+	tiles[12][6] = purple;
+	tiles[8][9] = green;
+	tiles[14][2] = yellow;
+	tiles[3][2] = red;
 }
 
 Board::~Board()
@@ -64,7 +71,7 @@ void Board::Draw(SDL_Renderer *renderer)
 				break;
 
 			case purple:
-				SDL_SetRenderDrawColor(renderer, 185, 0, 255, 255);
+				SDL_SetRenderDrawColor(renderer, 160, 0, 255, 255);
 				break;
 
 			case red:
