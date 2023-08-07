@@ -3,7 +3,22 @@
 
 Tetromino::Tetromino()
 {
-
+	tet_tiles[0][0] = red;
+	tet_tiles[0][1] = red;
+	tet_tiles[0][2] = red;
+	tet_tiles[0][3] = red;
+	tet_tiles[1][0] = red;
+	tet_tiles[1][1] = red;
+	tet_tiles[1][2] = red;
+	tet_tiles[1][3] = red;
+	tet_tiles[2][0] = red;
+	tet_tiles[2][1] = red;
+	tet_tiles[2][2] = red;
+	tet_tiles[2][3] = red;
+	tet_tiles[3][0] = red;
+	tet_tiles[3][1] = red;
+	tet_tiles[3][2] = red;
+	tet_tiles[3][3] = red;
 }
 
 Tetromino::~Tetromino()
@@ -11,8 +26,12 @@ Tetromino::~Tetromino()
 
 }
 
-void Tetromino::Update(float dT, const InputWomanager* pInputWoman, double t)
+Position Tetromino::get_pos()
 {
+	return pos;
+}
+
+// NOTES: 
 	// As time passes, the Tetromino should move down
 
 	// If player pressed the down arrow, the tetromino should move down at double time
@@ -25,9 +44,3 @@ void Tetromino::Update(float dT, const InputWomanager* pInputWoman, double t)
 	// If the player presses the right arrow, the Tetromino should move right
 
 	// If the player presses the left arrow, the Tetromino should move left
-}
-
-void Tetromino::Draw(SDL_Renderer* renderer)
-{
-
-}
