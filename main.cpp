@@ -3,6 +3,7 @@
 #define SDL_MAIN_HANDLED 1
 #include <SDL.h>
 #include "board.h"
+#include "tetromino.h"
 
 
 
@@ -17,6 +18,29 @@
 #define SDL_ASSERT(value) if (!(value)) { printf("Error! %s\n", SDL_GetError()); __debugbreak(); }
 #define SDL_ERRCHECK(value) if ((value) == -1) { printf("Error! %s\n", SDL_GetError()); __debugbreak(); }
 
+
+// function: place a tetromino on the board
+// while tetromino is not placed, is when it's pos or rotation changes
+// in a valid place!
+void place_piece(Board, Tetromino)
+{
+	// find out what coordinates in the tetromino are solid
+
+	// get the tetromino's xfm data
+		// check for collision
+			// sides of board
+			// bottom of board
+			// with other filled in tiles of board
+
+		// if no collision
+			// update board's tiles info
+			// so board draws where the tetromino is
+}
+
+// function: remove a tetromino from the board
+
+
+// function: randomly pick a tetromino
 
 
 int main(int cpChz, char** apChzArg)
@@ -46,6 +70,7 @@ int main(int cpChz, char** apChzArg)
 	SDL_ASSERT(pRenderer);
 
 	Board board(w_width, w_height);
+
 	
 
 	bool fRunWindow = true;
