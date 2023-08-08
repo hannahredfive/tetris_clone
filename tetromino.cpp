@@ -19,6 +19,9 @@ Tetromino::Tetromino()
 	tet_tiles[3][1] = red;
 	tet_tiles[3][2] = red;
 	tet_tiles[3][3] = red;
+
+	pos._x = 3;
+	pos._y = 6;
 }
 
 Tetromino::~Tetromino()

@@ -19,22 +19,24 @@
 #define SDL_ERRCHECK(value) if ((value) == -1) { printf("Error! %s\n", SDL_GetError()); __debugbreak(); }
 
 
-// function: place a tetromino on the board
-// while tetromino is not placed, is when it's pos or rotation changes
-// in a valid place!
-void place_piece(Board, Tetromino)
-{
-	// find out what coordinates in the tetromino are solid
-
-	// get the tetromino's xfm data
-		// check for collision
+// function: check for collision
+	// based on the tetronimo's pos is
+		// check for collision in the following scenarios 
 			// sides of board
 			// bottom of board
 			// with other filled in tiles of board
 
-		// if no collision
-			// update board's tiles info
-			// so board draws where the tetromino is
+// function: place a tetromino on the board
+// while tetromino is not placed, is when it's pos or rotation changes
+void place_piece(Board board, Tetromino tet)
+{
+	// get the tetromino's data
+	Position tet_pos = tet.get_pos();
+	// tet.get colors func
+	
+	// update board's tiles info using board.set colors func
+	// so board draws where the tetromino is
+
 }
 
 // function: remove a tetromino from the board

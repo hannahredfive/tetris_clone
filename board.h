@@ -7,6 +7,7 @@ public:
 	Board(int window_width, int window_height);
 	~Board();
 	void Draw(SDL_Renderer *);
+	// set color func
 	static const int s_height = 20;
 	static const int s_width = 10;
 private:

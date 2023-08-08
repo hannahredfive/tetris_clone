@@ -15,6 +15,7 @@ public:
 	~Tetromino();
 
 	Position get_pos();
+	// get colors func
 	
 	// max space a tetronimo can exist in, including rotation
 	static const int s_height = 4;
