@@ -8,12 +8,12 @@ Tetromino::Tetromino()
 	{
 		for (int x = 0; x < s_width; ++x)
 		{
-			tet_tiles[y][x] = red;
+			tet_tiles[y][x] = purple;
 		}
 	}
 
 	pos._x = 3;
-	pos._y = 6;
+	pos._y = 0;
 }
 
 Tetromino::~Tetromino()
