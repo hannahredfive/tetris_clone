@@ -30,5 +30,6 @@ private:
 
 	Position pos;
 
-	double t_lastmove;
+	double t_lastHmove;
+	double t_lastVmove;
 };

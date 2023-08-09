@@ -16,6 +16,10 @@ Tetromino::Tetromino()
 
 	pos._x = 3;
 	pos._y = 0;
+
+	t_lastHmove = 0;
+	t_lastVmove = 0;
+
 }
 
 Tetromino::~Tetromino()
@@ -30,8 +34,9 @@ Position Tetromino::get_pos()
 
 void Tetromino::update(double t, const InputWomanager* pInputWoman)
 {
-	double diff = t - t_lastmove;
-	if (diff < 0.5)
+	double h_diff = t - t_lastHmove;
+	double v_diff = t - t_lastVmove;
+	if (h_diff < 0.5)
 	{
 		return;
 	}
@@ -44,7 +49,7 @@ void Tetromino::update(double t, const InputWomanager* pInputWoman)
 		if (pos._x > 0)
 		{
 			pos._x -= 1;
-			t_lastmove = t;
+			t_lastHmove = t;
 		}
 	}
 
@@ -56,8 +61,19 @@ void Tetromino::update(double t, const InputWomanager* pInputWoman)
 		if (pos._x < Board::s_width - s_width)
 		{
 			pos._x += 1;
-			t_lastmove = t;
+			t_lastHmove = t;
 		}
+	}
+
+	if (v_diff < 1)
+	{
+		return;
+	}
+
+	if (pos._y < Board::s_height - s_height)
+	{
+		pos._y += 1;
+		t_lastVmove = t;
 	}
 }
 
