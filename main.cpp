@@ -29,7 +29,7 @@
 
 // function: place a tetromino on the board
 // while tetromino is not placed, is when it's pos or rotation changes
-void place_piece(Board* board, Tetromino tet)
+void place_piece(Board* pboard, Tetromino tet)
 {
 	// get the tetromino's data
 	Position tet_pos = tet.get_pos();
@@ -39,13 +39,26 @@ void place_piece(Board* board, Tetromino tet)
 		{
 			// update board's tiles color data
 			colors tet_color = tet.get_color(x, y);
-			board->set_colors(tet_color, tet_pos, x, y);
+			pboard->set_colors(tet_color, tet_pos, x, y);
 		}
 	}
 }
 
 // function: remove a tetromino from the board
-
+void pickup_piece(Board* pboard, Tetromino tet)
+{
+	// get the tetromino's data
+	Position tet_pos = tet.get_pos();
+	for (int y = 0; y < tet.s_height; ++y)
+	{
+		for (int x = 0; x < tet.s_width; ++x)
+		{
+			// update board's tiles color data to empty
+			colors color = empty;
+			pboard->set_colors(color, tet_pos, x, y);
+		}
+	}
+}
 
 // function: randomly pick a tetromino
 
