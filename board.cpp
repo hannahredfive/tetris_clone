@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include "board.h"
 #include "SDL2/include/SDL.h"
+#include "common.h"
 
 Board::Board(int window_width, int window_height)
 {
@@ -22,6 +24,7 @@ Board::Board(int window_width, int window_height)
 	board_ypos = 40;
 
 	// testing colors!
+	/*
 	tiles[0][0] = blue;
 	tiles[5][8] = cyan;
 	tiles[18][3] = orange;
@@ -29,11 +32,17 @@ Board::Board(int window_width, int window_height)
 	tiles[8][9] = green;
 	tiles[14][2] = yellow;
 	tiles[3][2] = red;
+	*/
 }
 
 Board::~Board()
 {
 
+}
+
+void Board::set_colors(colors color, Position pos, int offset_x, int offset_y)
+{
+	tiles[pos._y + offset_y][pos._x + offset_x] = color;
 }
 
 void Board::Draw(SDL_Renderer *renderer)

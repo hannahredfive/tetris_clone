@@ -1,24 +1,16 @@
 #include "tetromino.h"
 #include "SDL2/include/SDL.h"
+#include "common.h"
 
 Tetromino::Tetromino()
 {
-	tet_tiles[0][0] = red;
-	tet_tiles[0][1] = red;
-	tet_tiles[0][2] = red;
-	tet_tiles[0][3] = red;
-	tet_tiles[1][0] = red;
-	tet_tiles[1][1] = red;
-	tet_tiles[1][2] = red;
-	tet_tiles[1][3] = red;
-	tet_tiles[2][0] = red;
-	tet_tiles[2][1] = red;
-	tet_tiles[2][2] = red;
-	tet_tiles[2][3] = red;
-	tet_tiles[3][0] = red;
-	tet_tiles[3][1] = red;
-	tet_tiles[3][2] = red;
-	tet_tiles[3][3] = red;
+	for (int y = 0; y < s_height; ++y)
+	{
+		for (int x = 0; x < s_width; ++x)
+		{
+			tet_tiles[y][x] = red;
+		}
+	}
 
 	pos._x = 3;
 	pos._y = 6;
@@ -32,6 +24,11 @@ Tetromino::~Tetromino()
 Position Tetromino::get_pos()
 {
 	return pos;
+}
+
+colors Tetromino::get_color(int x, int y)
+{
+	return tet_tiles[y][x];
 }
 
 // NOTES: 

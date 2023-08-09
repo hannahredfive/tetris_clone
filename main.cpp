@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "board.h"
 #include "tetromino.h"
+#include "common.h"
 
 
 
@@ -28,15 +29,19 @@
 
 // function: place a tetromino on the board
 // while tetromino is not placed, is when it's pos or rotation changes
-void place_piece(Board board, Tetromino tet)
+void place_piece(Board* board, Tetromino tet)
 {
 	// get the tetromino's data
 	Position tet_pos = tet.get_pos();
-	// tet.get colors func
-	
-	// update board's tiles info using board.set colors func
-	// so board draws where the tetromino is
-
+	for (int y = 0; y < tet.s_height; ++y)
+	{
+		for (int x = 0; x < tet.s_width; ++x)
+		{
+			// update board's tiles color data
+			colors tet_color = tet.get_color(x, y);
+			board->set_colors(tet_color, tet_pos, x, y);
+		}
+	}
 }
 
 // function: remove a tetromino from the board
@@ -72,6 +77,7 @@ int main(int cpChz, char** apChzArg)
 	SDL_ASSERT(pRenderer);
 
 	Board board(w_width, w_height);
+	
 
 	
 
@@ -97,6 +103,12 @@ int main(int cpChz, char** apChzArg)
 
 		// Draw board in the window
 		board.Draw(pRenderer);
+
+		// Make tetris piece
+		Tetromino tet;
+
+		// Place piece
+		place_piece(&board, tet);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 
