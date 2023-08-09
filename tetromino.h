@@ -12,7 +12,7 @@ public:
 	~Tetromino();
 
 	Position get_pos();
-	void update(const InputWomanager* pInputWoman);
+	void update(double t, const InputWomanager* pInputWoman);
 	colors get_color(int x, int y);
 	
 	// max space a tetronimo can exist in, including rotation
@@ -29,4 +29,6 @@ private:
 	colors tet_tiles[s_height][s_width];
 
 	Position pos;
+
+	double t_lastmove;
 };

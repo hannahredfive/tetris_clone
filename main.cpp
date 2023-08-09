@@ -5,6 +5,7 @@
 #include "board.h"
 #include "tetromino.h"
 #include "common.h"
+#include "clock.h"
 
 
 
@@ -95,6 +96,10 @@ int main(int cpChz, char** apChzArg)
 	Board board(w_width, w_height);
 	Tetromino tet;
 	place_piece(&board, tet);
+
+	Clock clock;
+	double t = clock.TNow();
+	double dT = Clock::dT60Fps;
 	
 
 	bool fRunWindow = true;
@@ -126,12 +131,14 @@ int main(int cpChz, char** apChzArg)
 		pickup_piece(&board, tet);
 
 		// Update piece
-		tet.update(&inputwoman);
+		tet.update(t, &inputwoman);
 
 		// Place piece
 		place_piece(&board, tet);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
+
+		t = clock.TNow();
 	}
 }

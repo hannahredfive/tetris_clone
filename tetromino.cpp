@@ -28,16 +28,23 @@ Position Tetromino::get_pos()
 	return pos;
 }
 
-void Tetromino::update(const InputWomanager* pInputWoman)
+void Tetromino::update(double t, const InputWomanager* pInputWoman)
 {
+	double diff = t - t_lastmove;
+	if (diff < 0.5)
+	{
+		return;
+	}
+
 	// left or right movement
-	// need to add time and delta time to see incremental movement
+	// need to add delta time to see incremental movement
 
 	if (pInputWoman->IsButtonDown(InputType::LeftArrow))
 	{
 		if (pos._x > 0)
 		{
 			pos._x -= 1;
+			t_lastmove = t;
 		}
 	}
 
@@ -49,9 +56,9 @@ void Tetromino::update(const InputWomanager* pInputWoman)
 		if (pos._x < Board::s_width - s_width)
 		{
 			pos._x += 1;
+			t_lastmove = t;
 		}
 	}
-
 }
 
 colors Tetromino::get_color(int x, int y)
