@@ -12,6 +12,11 @@ InputWomanager::~InputWomanager()
 
 }
 
+bool InputWomanager::IsButtonDown(InputType in) const
+{
+    return isDown[in];
+}
+
 void InputWomanager::HandleEvent(SDL_Event e)
 {
     //User presses a key
