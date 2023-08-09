@@ -1,5 +1,7 @@
 #include "tetromino.h"
 #include "SDL2/include/SDL.h"
+#include "InputWomanager.h"
+#include "board.h"
 #include "common.h"
 
 Tetromino::Tetromino()
@@ -24,6 +26,32 @@ Tetromino::~Tetromino()
 Position Tetromino::get_pos()
 {
 	return pos;
+}
+
+void Tetromino::update(const InputWomanager* pInputWoman)
+{
+	// left or right movement
+	// need to add time and delta time to see incremental movement
+
+	if (pInputWoman->IsButtonDown(InputType::LeftArrow))
+	{
+		if (pos._x > 0)
+		{
+			pos._x -= 1;
+		}
+	}
+
+	else if (pInputWoman->IsButtonDown(InputType::RightArrow))
+	{
+		// this boundary is because of the 4x4 tet tile size
+		// I will need account for empty cells moving forward
+		// but this will do for now!
+		if (pos._x < Board::s_width - s_width)
+		{
+			pos._x += 1;
+		}
+	}
+
 }
 
 colors Tetromino::get_color(int x, int y)

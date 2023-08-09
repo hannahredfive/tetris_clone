@@ -28,7 +28,6 @@
 			// with other filled in tiles of board
 
 // function: place a tetromino on the board
-// while tetromino is not placed, is when it's pos or rotation changes
 void place_piece(Board* pboard, Tetromino tet)
 {
 	// get the tetromino's data
@@ -43,6 +42,8 @@ void place_piece(Board* pboard, Tetromino tet)
 		}
 	}
 }
+
+// while tetromino is not placed, is when it's pos or rotation changes
 
 // function: remove a tetromino from the board
 void pickup_piece(Board* pboard, Tetromino tet)
@@ -89,9 +90,11 @@ int main(int cpChz, char** apChzArg)
 	SDL_Renderer* pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	SDL_ASSERT(pRenderer);
 
-	Board board(w_width, w_height);
 	
-
+	InputWomanager inputwoman;
+	Board board(w_width, w_height);
+	Tetromino tet;
+	place_piece(&board, tet);
 	
 
 	bool fRunWindow = true;
@@ -104,6 +107,8 @@ int main(int cpChz, char** apChzArg)
 		{
 			if (event.type == SDL_QUIT)
 				fRunWindow = false;
+			else
+				inputwoman.HandleEvent(event);
 		}
 
 		// Statefully set the color of the next render operation to pink
@@ -117,14 +122,16 @@ int main(int cpChz, char** apChzArg)
 		// Draw board in the window
 		board.Draw(pRenderer);
 
-		// Make tetris piece
-		Tetromino tet;
+		// Pickup piece
+		pickup_piece(&board, tet);
+
+		// Update piece
+		tet.update(&inputwoman);
 
 		// Place piece
 		place_piece(&board, tet);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
-
 		SDL_RenderPresent(pRenderer);
 	}
 }
