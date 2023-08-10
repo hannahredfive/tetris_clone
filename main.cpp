@@ -138,8 +138,8 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 		}
 	}
 
-	// falling!
-	if (y_diff > .2 && pInputWoman->IsButtonDown(InputType::DownArrow))
+	// downpress makes the piece fall faster
+	if (y_diff > 0.15 && pInputWoman->IsButtonDown(InputType::DownArrow))
 	{
 		pos._y += 1;
 		ptet->set_pos(pos._x, pos._y);
@@ -158,6 +158,7 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	{
 		place_piece(pboard, ptet);
 	}
+	// normal falling!
 	else
 	{
 		pos._y += 1;
