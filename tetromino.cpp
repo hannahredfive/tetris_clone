@@ -15,10 +15,10 @@ Tetromino::Tetromino()
 		}
 	}
 
-	tet_tiles[0][1] = purple;
 	tet_tiles[1][1] = purple;
-	tet_tiles[2][1] = purple;
 	tet_tiles[1][2] = purple;
+	tet_tiles[2][1] = purple;
+	tet_tiles[2][2] = purple;
 	
 
 	pos._x = 3;

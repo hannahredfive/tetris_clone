@@ -149,6 +149,7 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 			ptet->set_pos(pos._x, pos._y);
 			place_piece(pboard, ptet);
 			ptet->set_pos(3, 0);
+			pboard->check_rows();
 			// also change piece type/color
 		}
 		*pt_lastYmove = t;
@@ -169,6 +170,7 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 			ptet->set_pos(pos._x, pos._y);
 			place_piece(pboard, ptet);
 			ptet->set_pos(3, 0);
+			pboard->check_rows();
 			// also change piece type/color
 		}
 		*pt_lastYmove = t;

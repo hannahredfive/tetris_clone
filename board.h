@@ -9,6 +9,8 @@ public:
 	~Board();
 	colors get_color(int x, int y);
 	void set_colors(colors color, Position pos, int offset_x, int offset_y);
+	void delete_row(int y);
+	void check_rows();
 	void Draw(SDL_Renderer *);
 	static const int s_height = 20;
 	static const int s_width = 10;

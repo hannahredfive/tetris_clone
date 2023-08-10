@@ -39,6 +39,38 @@ void Board::set_colors(colors color, Position pos, int offset_x, int offset_y)
 	tiles[pos._y + offset_y][pos._x + offset_x] = color;
 }
 
+void Board::delete_row(int y)
+{
+	for (y; y > 0; --y)
+	{
+		for (int x = 0; x < s_width; ++x)
+		{
+			tiles[y][x] = tiles[y - 1][x];
+		}
+	}
+}
+
+void Board::check_rows()
+{
+	int row_count = 0;
+	for (int y = 0; y < s_height; ++y)
+	{
+		for (int x = 0; x < s_width; ++x)
+		{
+			if (tiles[y][x] != empty)
+			{
+				row_count += 1;
+			}
+			if (row_count == 10)
+			{
+				delete_row(y);
+			}
+		}
+		row_count = 0;
+	}
+
+}
+
 void Board::Draw(SDL_Renderer *renderer)
 {
 	for (int y = 0; y < s_height; ++y)
