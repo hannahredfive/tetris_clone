@@ -103,62 +103,76 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	// pickup piece
 	pickup_piece(pboard, ptet);
 
-	// find time since last movement on x & y
-	double x_diff = t - *pt_lastXmove;
-	double y_diff = t - *pt_lastYmove;
-	if (x_diff < 0.5)
-	{
-		place_piece(pboard, ptet);
-		return;
-	}
-
 	// Get tet data
 	Position pos = ptet->get_pos();
 
-	// left movement
-	if (pInputWoman->IsButtonDown(InputType::LeftArrow))
+	// find time since last movement on x & y
+	double x_diff = t - *pt_lastXmove;
+	double y_diff = t - *pt_lastYmove;
+	if (x_diff > 0.5)
 	{
-		pos._x -= 1;
-		ptet->set_pos(pos._x, pos._y);
-		if (!collision(pboard, ptet))
-		{
-			pos._x += 1;
-			ptet->set_pos(pos._x, pos._y);
-		}
-		*pt_lastXmove = t;
-	}
-
-	// right movement
-	else if (pInputWoman->IsButtonDown(InputType::RightArrow))
-	{
-		pos._x += 1;
-		ptet->set_pos(pos._x, pos._y);
-		if (!collision(pboard, ptet))
+		// left movement
+		if (pInputWoman->IsButtonDown(InputType::LeftArrow))
 		{
 			pos._x -= 1;
 			ptet->set_pos(pos._x, pos._y);
+			if (!collision(pboard, ptet))
+			{
+				pos._x += 1;
+				ptet->set_pos(pos._x, pos._y);
+			}
+			*pt_lastXmove = t;
 		}
-		*pt_lastXmove = t;
+
+		// right movement
+		if (pInputWoman->IsButtonDown(InputType::RightArrow))
+		{
+			pos._x += 1;
+			ptet->set_pos(pos._x, pos._y);
+			if (!collision(pboard, ptet))
+			{
+				pos._x -= 1;
+				ptet->set_pos(pos._x, pos._y);
+			}
+			*pt_lastXmove = t;
+		}
 	}
 
 	// falling!
-	if (y_diff < 1)
+	if (y_diff > .2 && pInputWoman->IsButtonDown(InputType::DownArrow))
 	{
-		place_piece(pboard, ptet);
-		return;
-	}
-	pos._y += 1;
-	ptet->set_pos(pos._x, pos._y);
-	if (!collision(pboard, ptet))
-	{
-		pos._y -= 1;
+		pos._y += 1;
 		ptet->set_pos(pos._x, pos._y);
+		if (!collision(pboard, ptet))
+		{
+			pos._y -= 1;
+			ptet->set_pos(pos._x, pos._y);
+			place_piece(pboard, ptet);
+			ptet->set_pos(3, 0);
+			// also change piece type/color
+		}
+		*pt_lastYmove = t;
 		place_piece(pboard, ptet);
-		ptet->set_pos(3, 0);
-		// also change piece type/color
 	}
-	*pt_lastYmove = t;
-	place_piece(pboard, ptet);
+	else if (y_diff < 1)
+	{
+		place_piece(pboard, ptet);
+	}
+	else
+	{
+		pos._y += 1;
+		ptet->set_pos(pos._x, pos._y);
+		if (!collision(pboard, ptet))
+		{
+			pos._y -= 1;
+			ptet->set_pos(pos._x, pos._y);
+			place_piece(pboard, ptet);
+			ptet->set_pos(3, 0);
+			// also change piece type/color
+		}
+		*pt_lastYmove = t;
+		place_piece(pboard, ptet);
+	}
 }
 
 // function: randomly pick a tetromino
