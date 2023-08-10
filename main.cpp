@@ -22,11 +22,41 @@
 
 
 // function: check for collision
-	// based on the tetronimo's pos is
-		// check for collision in the following scenarios 
-			// sides of board
-			// bottom of board
-			// with other filled in tiles of board
+bool collision(Board * pboard, Tetromino * ptet)
+{
+	Position pos = ptet->get_pos();
+
+	for (int y = 0; y < ptet->s_height; ++y)
+	{
+		for (int x = 0; x < ptet->s_width; ++x)
+		{
+			if (ptet->get_color(x, y) != empty)
+			{
+				int board_x = pos._x + x;
+				int board_y = pos._y + y;
+	
+				// sides of board
+				if (board_x < 0 || board_x > 9)
+				{
+					return false;
+				}
+	
+				// bottom of board
+				if (board_y > 19)
+				{
+					return false;
+				}
+
+				// with other filled in tiles of board
+				if (pboard->get_color(board_x, board_y) != empty)
+				{
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
 
 // function: place a tetromino on the board
 void place_piece(Board* pboard, Tetromino* ptet)
@@ -58,28 +88,30 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	// Get tet data
 	Position pos = ptet->get_pos();
 
-	// left or right movement
+	// left movement
 	if (pInputWoman->IsButtonDown(InputType::LeftArrow))
 	{
-		if (pos._x > 0)
-		{
-			pos._x -= 1;
-			ptet->set_pos(pos._x, pos._y);
-			*pt_lastXmove = t;
-		}
-	}
-
-	else if (pInputWoman->IsButtonDown(InputType::RightArrow))
-	{
-		// this boundary is because of the 4x4 tet tile size
-		// I will need account for empty cells moving forward
-		// but this will do for now!
-		if (pos._x < Board::s_width - Tetromino::s_width)
+		pos._x -= 1;
+		ptet->set_pos(pos._x, pos._y);
+		if (!collision(pboard, ptet))
 		{
 			pos._x += 1;
 			ptet->set_pos(pos._x, pos._y);
-			*pt_lastXmove = t;
 		}
+		*pt_lastXmove = t;
+	}
+
+	// right movement
+	else if (pInputWoman->IsButtonDown(InputType::RightArrow))
+	{
+		pos._x += 1;
+		ptet->set_pos(pos._x, pos._y);
+		if (!collision(pboard, ptet))
+		{
+			pos._x -= 1;
+			ptet->set_pos(pos._x, pos._y);
+		}
+		*pt_lastXmove = t;
 	}
 
 	// falling!
@@ -87,13 +119,15 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	{
 		return;
 	}
-
-	if (pos._y < Board::s_height - Tetromino::s_height)
+	pos._y += 1;
+	ptet->set_pos(pos._x, pos._y);
+	if (!collision(pboard, ptet))
 	{
-		pos._y += 1;
+		pos._y -= 1;
 		ptet->set_pos(pos._x, pos._y);
-		*pt_lastYmove = t;
+		return;
 	}
+	*pt_lastYmove = t;
 }
 
 // function: remove a tetromino from the board

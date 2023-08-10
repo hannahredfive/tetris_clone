@@ -22,22 +22,16 @@ Board::Board(int window_width, int window_height)
 	tile_h = 20;
 	board_xpos = 240;
 	board_ypos = 40;
-
-	// testing colors!
-	/*
-	tiles[0][0] = blue;
-	tiles[5][8] = cyan;
-	tiles[18][3] = orange;
-	tiles[12][6] = purple;
-	tiles[8][9] = green;
-	tiles[14][2] = yellow;
-	tiles[3][2] = red;
-	*/
 }
 
 Board::~Board()
 {
 
+}
+
+colors Board::get_color(int x, int y)
+{
+	return tiles[y][x];
 }
 
 void Board::set_colors(colors color, Position pos, int offset_x, int offset_y)
