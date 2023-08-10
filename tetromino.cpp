@@ -16,10 +16,6 @@ Tetromino::Tetromino()
 
 	pos._x = 3;
 	pos._y = 0;
-
-	t_lastHmove = 0;
-	t_lastVmove = 0;
-
 }
 
 Tetromino::~Tetromino()
@@ -36,51 +32,6 @@ void Tetromino::set_pos(int x, int y)
 {
 	pos._x = x;
 	pos._y = y;
-}
-
-void Tetromino::update(double t, const InputWomanager* pInputWoman)
-{
-	double h_diff = t - t_lastHmove;
-	double v_diff = t - t_lastVmove;
-	if (h_diff < 0.5)
-	{
-		return;
-	}
-
-	// left or right movement
-	// need to add delta time to see incremental movement
-
-	if (pInputWoman->IsButtonDown(InputType::LeftArrow))
-	{
-		if (pos._x > 0)
-		{
-			pos._x -= 1;
-			t_lastHmove = t;
-		}
-	}
-
-	else if (pInputWoman->IsButtonDown(InputType::RightArrow))
-	{
-		// this boundary is because of the 4x4 tet tile size
-		// I will need account for empty cells moving forward
-		// but this will do for now!
-		if (pos._x < Board::s_width - s_width)
-		{
-			pos._x += 1;
-			t_lastHmove = t;
-		}
-	}
-
-	if (v_diff < 1)
-	{
-		return;
-	}
-
-	if (pos._y < Board::s_height - s_height)
-	{
-		pos._y += 1;
-		t_lastVmove = t;
-	}
 }
 
 colors Tetromino::get_color(int x, int y)

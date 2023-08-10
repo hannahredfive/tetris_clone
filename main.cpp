@@ -29,31 +29,81 @@
 			// with other filled in tiles of board
 
 // function: place a tetromino on the board
-void place_piece(Board* pboard, Tetromino tet)
+void place_piece(Board* pboard, Tetromino* ptet)
 {
 	// get the tetromino's data
-	Position tet_pos = tet.get_pos();
-	for (int y = 0; y < tet.s_height; ++y)
+	Position tet_pos = ptet->get_pos();
+	for (int y = 0; y < ptet->s_height; ++y)
 	{
-		for (int x = 0; x < tet.s_width; ++x)
+		for (int x = 0; x < ptet->s_width; ++x)
 		{
 			// update board's tiles color data
-			colors tet_color = tet.get_color(x, y);
+			colors tet_color = ptet->get_color(x, y);
 			pboard->set_colors(tet_color, tet_pos, x, y);
 		}
 	}
 }
 
 // while tetromino is not placed, is when it's pos or rotation changes
+void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove)
+{
+	// find time since last movement on x & y
+	double x_diff = t - *pt_lastXmove;
+	double y_diff = t - *pt_lastYmove;
+	if (x_diff < 0.5)
+	{
+		return;
+	}
+
+	// Get tet data
+	Position pos = ptet->get_pos();
+
+	// left or right movement
+	if (pInputWoman->IsButtonDown(InputType::LeftArrow))
+	{
+		if (pos._x > 0)
+		{
+			pos._x -= 1;
+			ptet->set_pos(pos._x, pos._y);
+			*pt_lastXmove = t;
+		}
+	}
+
+	else if (pInputWoman->IsButtonDown(InputType::RightArrow))
+	{
+		// this boundary is because of the 4x4 tet tile size
+		// I will need account for empty cells moving forward
+		// but this will do for now!
+		if (pos._x < Board::s_width - Tetromino::s_width)
+		{
+			pos._x += 1;
+			ptet->set_pos(pos._x, pos._y);
+			*pt_lastXmove = t;
+		}
+	}
+
+	// falling!
+	if (y_diff < 1)
+	{
+		return;
+	}
+
+	if (pos._y < Board::s_height - Tetromino::s_height)
+	{
+		pos._y += 1;
+		ptet->set_pos(pos._x, pos._y);
+		*pt_lastYmove = t;
+	}
+}
 
 // function: remove a tetromino from the board
-void pickup_piece(Board* pboard, Tetromino tet)
+void pickup_piece(Board* pboard, Tetromino* ptet)
 {
 	// get the tetromino's data
-	Position tet_pos = tet.get_pos();
-	for (int y = 0; y < tet.s_height; ++y)
+	Position tet_pos = ptet->get_pos();
+	for (int y = 0; y < ptet->s_height; ++y)
 	{
-		for (int x = 0; x < tet.s_width; ++x)
+		for (int x = 0; x < ptet->s_width; ++x)
 		{
 			// update board's tiles color data to empty
 			colors color = empty;
@@ -91,11 +141,12 @@ int main(int cpChz, char** apChzArg)
 	SDL_Renderer* pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	SDL_ASSERT(pRenderer);
 
-	
+	double t_lastXmove = 0;
+	double t_lastYmove = 0;
 	InputWomanager inputwoman;
 	Board board(w_width, w_height);
 	Tetromino tet;
-	place_piece(&board, tet);
+	place_piece(&board, &tet);
 
 	Clock clock;
 	double t = clock.TNow();
@@ -128,13 +179,14 @@ int main(int cpChz, char** apChzArg)
 		board.Draw(pRenderer);
 
 		// Pickup piece
-		pickup_piece(&board, tet);
+		pickup_piece(&board, &tet);
 
 		// Update piece
-		tet.update(t, &inputwoman);
+		update_piece(&inputwoman, &board, &tet, t, &t_lastXmove, &t_lastYmove);
+		// tet.update(t, &inputwoman);
 
 		// Place piece
-		place_piece(&board, tet);
+		place_piece(&board, &tet);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
