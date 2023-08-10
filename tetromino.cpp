@@ -101,6 +101,11 @@ colors Tetromino::get_color(int x, int y)
 	return tet_tiles[y][x];
 }
 
+void Tetromino::change_color()
+{
+	*this = Tetromino();
+}
+
 // NOTES: 
 	// As time passes, the Tetromino should move down
 
