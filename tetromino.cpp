@@ -6,13 +6,20 @@
 
 Tetromino::Tetromino()
 {
+	
 	for (int y = 0; y < s_height; ++y)
 	{
 		for (int x = 0; x < s_width; ++x)
 		{
-			tet_tiles[y][x] = purple;
+			tet_tiles[y][x] = empty;
 		}
 	}
+
+	tet_tiles[0][1] = purple;
+	tet_tiles[1][1] = purple;
+	tet_tiles[2][1] = purple;
+	tet_tiles[1][2] = purple;
+	
 
 	pos._x = 3;
 	pos._y = 0;

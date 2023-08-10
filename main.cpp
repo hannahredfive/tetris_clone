@@ -69,7 +69,10 @@ void place_piece(Board* pboard, Tetromino* ptet)
 		{
 			// update board's tiles color data
 			colors tet_color = ptet->get_color(x, y);
-			pboard->set_colors(tet_color, tet_pos, x, y);
+			if (tet_color != empty)
+			{
+				pboard->set_colors(tet_color, tet_pos, x, y);
+			}
 		}
 	}
 }
@@ -125,7 +128,6 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	{
 		pos._y -= 1;
 		ptet->set_pos(pos._x, pos._y);
-		return;
 	}
 	*pt_lastYmove = t;
 }
@@ -139,9 +141,12 @@ void pickup_piece(Board* pboard, Tetromino* ptet)
 	{
 		for (int x = 0; x < ptet->s_width; ++x)
 		{
-			// update board's tiles color data to empty
-			colors color = empty;
-			pboard->set_colors(color, tet_pos, x, y);
+			if (ptet->get_color(x, y) != empty)
+			{
+				// update board's tiles color data to empty
+				colors color = empty;
+				pboard->set_colors(color, tet_pos, x, y);
+			}
 		}
 	}
 }
