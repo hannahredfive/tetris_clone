@@ -77,14 +77,38 @@ void place_piece(Board* pboard, Tetromino* ptet)
 	}
 }
 
+
+// function: remove a tetromino from the board
+void pickup_piece(Board* pboard, Tetromino* ptet)
+{
+	// get the tetromino's data
+	Position tet_pos = ptet->get_pos();
+	for (int y = 0; y < ptet->s_height; ++y)
+	{
+		for (int x = 0; x < ptet->s_width; ++x)
+		{
+			if (ptet->get_color(x, y) != empty)
+			{
+				// update board's tiles color data to empty
+				colors color = empty;
+				pboard->set_colors(color, tet_pos, x, y);
+			}
+		}
+	}
+}
+
 // while tetromino is not placed, is when it's pos or rotation changes
 void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove)
 {
+	// pickup piece
+	pickup_piece(pboard, ptet);
+
 	// find time since last movement on x & y
 	double x_diff = t - *pt_lastXmove;
 	double y_diff = t - *pt_lastYmove;
 	if (x_diff < 0.5)
 	{
+		place_piece(pboard, ptet);
 		return;
 	}
 
@@ -120,6 +144,7 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	// falling!
 	if (y_diff < 1)
 	{
+		place_piece(pboard, ptet);
 		return;
 	}
 	pos._y += 1;
@@ -128,27 +153,12 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	{
 		pos._y -= 1;
 		ptet->set_pos(pos._x, pos._y);
+		place_piece(pboard, ptet);
+		ptet->set_pos(3, 0);
+		// also change piece type/color
 	}
 	*pt_lastYmove = t;
-}
-
-// function: remove a tetromino from the board
-void pickup_piece(Board* pboard, Tetromino* ptet)
-{
-	// get the tetromino's data
-	Position tet_pos = ptet->get_pos();
-	for (int y = 0; y < ptet->s_height; ++y)
-	{
-		for (int x = 0; x < ptet->s_width; ++x)
-		{
-			if (ptet->get_color(x, y) != empty)
-			{
-				// update board's tiles color data to empty
-				colors color = empty;
-				pboard->set_colors(color, tet_pos, x, y);
-			}
-		}
-	}
+	place_piece(pboard, ptet);
 }
 
 // function: randomly pick a tetromino
@@ -217,15 +227,8 @@ int main(int cpChz, char** apChzArg)
 		// Draw board in the window
 		board.Draw(pRenderer);
 
-		// Pickup piece
-		pickup_piece(&board, &tet);
-
 		// Update piece
 		update_piece(&inputwoman, &board, &tet, t, &t_lastXmove, &t_lastYmove);
-		// tet.update(t, &inputwoman);
-
-		// Place piece
-		place_piece(&board, &tet);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
