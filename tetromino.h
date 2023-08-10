@@ -12,6 +12,7 @@ public:
 	~Tetromino();
 
 	Position get_pos();
+	void set_pos(int x, int y);
 	void update(double t, const InputWomanager* pInputWoman);
 	colors get_color(int x, int y);
 	

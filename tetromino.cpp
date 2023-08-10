@@ -32,6 +32,12 @@ Position Tetromino::get_pos()
 	return pos;
 }
 
+void Tetromino::set_pos(int x, int y)
+{
+	pos._x = x;
+	pos._y = y;
+}
+
 void Tetromino::update(double t, const InputWomanager* pInputWoman)
 {
 	double h_diff = t - t_lastHmove;
