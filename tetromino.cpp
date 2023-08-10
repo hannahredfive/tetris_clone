@@ -3,6 +3,8 @@
 #include "InputWomanager.h"
 #include "board.h"
 #include "common.h"
+#include <cstdlib>
+#include <time.h>
 
 Tetromino::Tetromino()
 {
@@ -15,10 +17,63 @@ Tetromino::Tetromino()
 		}
 	}
 
-	tet_tiles[1][1] = purple;
-	tet_tiles[1][2] = purple;
-	tet_tiles[2][1] = purple;
-	tet_tiles[2][2] = purple;
+	srand (time(NULL));
+	colors color = colors(rand() % 7 + 1);
+
+	switch (color)
+	{
+	case orange: // orange ricky
+		tet_tiles[0][2] = orange;
+		tet_tiles[1][0] = orange;
+		tet_tiles[1][1] = orange;
+		tet_tiles[1][2] = orange;
+		break;
+
+	case blue:  // blue ricky
+		tet_tiles[0][0] = blue;
+		tet_tiles[1][0] = blue;
+		tet_tiles[1][1] = blue;
+		tet_tiles[1][2] = blue;
+		break;
+
+	case yellow: // smashboy
+		tet_tiles[0][1] = yellow;
+		tet_tiles[0][2] = yellow;
+		tet_tiles[1][1] = yellow;
+		tet_tiles[1][2] = yellow;
+		break;
+
+	case cyan: // teewee
+		tet_tiles[0][1] = cyan;
+		tet_tiles[1][0] = cyan;
+		tet_tiles[1][1] = cyan;
+		tet_tiles[1][2] = cyan;
+		break;
+
+	case green: // cleveland z
+		tet_tiles[0][0] = green;
+		tet_tiles[0][1] = green;
+		tet_tiles[1][1] = green;
+		tet_tiles[1][2] = green;
+		break;
+
+	case purple: // rhode island z
+		tet_tiles[0][3] = purple;
+		tet_tiles[0][2] = purple;
+		tet_tiles[1][2] = purple;
+		tet_tiles[1][1] = purple;
+		break;
+
+	case red: // hero
+		tet_tiles[0][2] = red;
+		tet_tiles[1][2] = red;
+		tet_tiles[2][2] = red;
+		tet_tiles[3][2] = red;
+		break;
+	}
+
+
+	
 	
 
 	pos._x = 3;
