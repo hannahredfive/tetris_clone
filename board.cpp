@@ -73,15 +73,21 @@ void Board::check_rows()
 
 }
 
-void Board::is_game_over()
+bool Board::is_game_over()
 {
 	for (int x = 0; x < s_width; ++x)
 	{
 		if (tiles[0][x] != empty)
 		{
-			*this = Board(window_w, window_h);
+			return true;
 		}
 	}
+	return false;
+}
+
+void Board::clear_board()
+{
+	*this = Board(window_w, window_h);
 }
 
 void Board::Draw(SDL_Renderer *renderer)

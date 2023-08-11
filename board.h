@@ -11,7 +11,8 @@ public:
 	void set_colors(colors color, Position pos, int offset_x, int offset_y);
 	void delete_row(int y);
 	void check_rows();
-	void is_game_over();
+	bool is_game_over();
+	void clear_board();
 	void Draw(SDL_Renderer *);
 	static const int s_height = 20;
 	static const int s_width = 10;

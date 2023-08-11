@@ -103,7 +103,11 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	pickup_piece(pboard, ptet);
 
 	// Check for game over
-	pboard->is_game_over();
+	if (pboard->is_game_over())
+	{
+		pboard->clear_board();
+		return;
+	}
 
 	// Get tet data
 	Position pos = ptet->get_pos();
