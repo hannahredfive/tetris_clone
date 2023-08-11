@@ -102,6 +102,9 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	// pickup piece
 	pickup_piece(pboard, ptet);
 
+	// Check for game over
+	pboard->is_game_over();
+
 	// Get tet data
 	Position pos = ptet->get_pos();
 
@@ -258,7 +261,7 @@ int main(int cpChz, char** apChzArg)
 
 		// Draw board in the window
 		board.Draw(pRenderer);
-
+		
 		// Update piece
 		update_piece(&inputwoman, &board, &tet, t, &t_lastXmove, &t_lastYmove, &t_lastRmove);
 

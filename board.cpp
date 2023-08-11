@@ -18,6 +18,8 @@ Board::Board(int window_width, int window_height)
 	// for now, tiles & board starting pos will be a hard coded, 
 	// but in future I want to have it be responsive to the size of the window made in main.cpp
 
+	window_w = window_width;
+	window_h = window_height;
 	tile_w = 20;
 	tile_h = 20;
 	board_xpos = 240;
@@ -69,6 +71,17 @@ void Board::check_rows()
 		row_count = 0;
 	}
 
+}
+
+void Board::is_game_over()
+{
+	for (int x = 0; x < s_width; ++x)
+	{
+		if (tiles[0][x] != empty)
+		{
+			*this = Board(window_w, window_h);
+		}
+	}
 }
 
 void Board::Draw(SDL_Renderer *renderer)

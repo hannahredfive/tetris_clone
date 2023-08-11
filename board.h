@@ -11,6 +11,7 @@ public:
 	void set_colors(colors color, Position pos, int offset_x, int offset_y);
 	void delete_row(int y);
 	void check_rows();
+	void is_game_over();
 	void Draw(SDL_Renderer *);
 	static const int s_height = 20;
 	static const int s_width = 10;
@@ -23,4 +24,6 @@ private:
 	int tile_h;
 	int board_xpos;
 	int board_ypos;
+	int window_w;
+	int window_h;
 };
