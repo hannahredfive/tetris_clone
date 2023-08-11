@@ -99,7 +99,7 @@ void pickup_piece(Board* pboard, Tetromino* ptet)
 }
 
 // while tetromino is not placed, is when it's pos or rotation changes
-void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove)
+void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove)
 {
 	// pickup piece
 	pickup_piece(pboard, ptet);
@@ -110,6 +110,24 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	// find time since last movement on x & y
 	double x_diff = t - *pt_lastXmove;
 	double y_diff = t - *pt_lastYmove;
+	double r_diff = t - *pt_lastRmove;
+
+	if (r_diff > 0.25)
+	{
+		// rotate
+		if (pInputWoman->IsButtonDown(InputType::UpArrow))
+		{
+			ptet->rotate();
+			if (!collision(pboard, ptet))
+			{
+				ptet->rotate();
+				ptet->rotate();
+				ptet->rotate();
+			}
+			*pt_lastRmove = t;
+		}
+	}
+
 	if (x_diff > 0.5)
 	{
 		// left movement
@@ -179,8 +197,6 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	}
 }
 
-// function: randomly pick a tetromino
-
 
 int main(int cpChz, char** apChzArg)
 {
@@ -210,6 +226,7 @@ int main(int cpChz, char** apChzArg)
 
 	double t_lastXmove = 0;
 	double t_lastYmove = 0;
+	double t_lastRmove = 0;
 	InputWomanager inputwoman;
 	Board board(w_width, w_height);
 	Tetromino tet;
@@ -246,7 +263,7 @@ int main(int cpChz, char** apChzArg)
 		board.Draw(pRenderer);
 
 		// Update piece
-		update_piece(&inputwoman, &board, &tet, t, &t_lastXmove, &t_lastYmove);
+		update_piece(&inputwoman, &board, &tet, t, &t_lastXmove, &t_lastYmove, &t_lastRmove);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);

@@ -15,6 +15,7 @@ public:
 	void set_pos(int x, int y);
 	colors get_color(int x, int y);
 	void change_color();
+	void rotate();
 	
 	// max space a tetronimo can exist in, including rotation
 	static const int s_height = 4;
