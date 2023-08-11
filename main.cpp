@@ -22,7 +22,6 @@
 #define SDL_ERRCHECK(value) if ((value) == -1) { printf("Error! %s\n", SDL_GetError()); __debugbreak(); }
 
 
-// function: check for collision
 bool collision(Board * pboard, Tetromino * ptet)
 {
 	Position pos = ptet->get_pos();
@@ -59,7 +58,7 @@ bool collision(Board * pboard, Tetromino * ptet)
 	return true;
 }
 
-// function: place a tetromino on the board
+
 void place_piece(Board* pboard, Tetromino* ptet)
 {
 	// get the tetromino's data
@@ -79,7 +78,6 @@ void place_piece(Board* pboard, Tetromino* ptet)
 }
 
 
-// function: remove a tetromino from the board
 void pickup_piece(Board* pboard, Tetromino* ptet)
 {
 	// get the tetromino's data
@@ -98,7 +96,7 @@ void pickup_piece(Board* pboard, Tetromino* ptet)
 	}
 }
 
-// while tetromino is not placed, is when it's pos or rotation changes
+
 void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove)
 {
 	// pickup piece
@@ -211,12 +209,12 @@ int main(int cpChz, char** apChzArg)
 
 	SDL_ERRCHECK(SDL_Init(SDL_INIT_VIDEO));
 
-	// Create a window with the title 'Hello World' in the center of the screen with dimensions as defined by width & height
+	// Create a window with dimensions as defined by width & height
 
 	int w_width = 680;
 	int w_height = 480;
 
-	SDL_Window* pWindow = SDL_CreateWindow("Hello World", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, 0);
+	SDL_Window* pWindow = SDL_CreateWindow("Hannah's Tetris Clone", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, 0);
 	SDL_ASSERT(pWindow);
 
 	// Create an accelerated renderer we can draw to
@@ -235,7 +233,6 @@ int main(int cpChz, char** apChzArg)
 	Clock clock;
 	double t = clock.TNow();
 	double dT = Clock::dT60Fps;
-	
 
 	bool fRunWindow = true;
 	while (fRunWindow)

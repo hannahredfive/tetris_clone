@@ -78,7 +78,6 @@ void Board::Draw(SDL_Renderer *renderer)
 		for (int x = 0; x < s_width; ++x)
 		{
 			// determine correct draw color for individual 
-			
 			switch (tiles[y][x])
 			{
 			case empty:
@@ -116,7 +115,6 @@ void Board::Draw(SDL_Renderer *renderer)
 
 			SDL_Rect tile{x * tile_w + board_xpos, y * tile_h + board_ypos, tile_w, tile_h};
 			SDL_RenderFillRect(renderer, &tile);
-
 		}
 	}
 }

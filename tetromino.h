@@ -22,12 +22,7 @@ public:
 	static const int s_width = 4;
 
 private:
-	enum orientation
-	{
-		left, up, right, down
-	};
-
-	// tet_tiles carries the data for what color each tile of the tetromino
+	// tet_tiles carries the color data for each tile of the tetromino
 	colors tet_tiles[s_height][s_width];
 	Position pos;
 };
