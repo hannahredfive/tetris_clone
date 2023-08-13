@@ -241,14 +241,14 @@ int main(int cpChz, char** apChzArg)
 	SDL_ASSERT(pRenderer);
 
 	// Font & Text Set-Up
-	TTF_Font* shade = TTF_OpenFont("fonts\\BungeeShade-Regular.ttf", 20);
-	TTF_Font* filled = TTF_OpenFont("fonts\\BungeeInline-Regular.ttf", 12);
+	TTF_Font* silkbold = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", 22);
+	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", 22);
 	SDL_Color white = { 255, 255, 255, 255 };
-	SDL_Surface* surface_message = TTF_RenderText_Solid(shade, "Hannah's Tetris Clone", white);
+	SDL_Surface* surface_message = TTF_RenderText_Solid(silkbold, "Hannah's Tetris Clone", white);
 	SDL_Texture* message = SDL_CreateTextureFromSurface(pRenderer, surface_message);
 	SDL_Rect message_rect;
-	message_rect.x = 0;
-	message_rect.y = 0;
+	message_rect.x = 680/2 - surface_message->w/2;
+	message_rect.y = 5;
 	message_rect.w = surface_message->w;
 	message_rect.h = surface_message->h;
 
@@ -283,7 +283,7 @@ int main(int cpChz, char** apChzArg)
 		}
 
 		// Statefully set the color of the next render operation to pink
-		SDL_ERRCHECK(SDL_SetRenderDrawColor(pRenderer, 0xFF, 0x00, 0xFF, 0xFF));
+		SDL_ERRCHECK(SDL_SetRenderDrawColor(pRenderer, 132, 169, 140, 255));
 
 		// Clear the entire screen to the last set render draw color
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
