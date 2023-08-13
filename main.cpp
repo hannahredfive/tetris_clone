@@ -2,6 +2,7 @@
 
 #define SDL_MAIN_HANDLED 1
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include "board.h"
 #include "tetromino.h"
 #include "common.h"
@@ -224,6 +225,7 @@ int main(int cpChz, char** apChzArg)
 	// Initialize SDL
 
 	SDL_ERRCHECK(SDL_Init(SDL_INIT_VIDEO));
+	SDL_ERRCHECK(TTF_Init());
 
 	// Create a window with dimensions as defined by width & height
 
@@ -238,18 +240,34 @@ int main(int cpChz, char** apChzArg)
 	SDL_Renderer* pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	SDL_ASSERT(pRenderer);
 
+	// Font & Text Set-Up
+	TTF_Font* shade = TTF_OpenFont("fonts\\BungeeShade-Regular.ttf", 20);
+	TTF_Font* filled = TTF_OpenFont("fonts\\BungeeInline-Regular.ttf", 12);
+	SDL_Color white = { 255, 255, 255, 255 };
+	SDL_Surface* surface_message = TTF_RenderText_Solid(shade, "Hannah's Tetris Clone", white);
+	SDL_Texture* message = SDL_CreateTextureFromSurface(pRenderer, surface_message);
+	SDL_Rect message_rect;
+	message_rect.x = 0;
+	message_rect.y = 0;
+	message_rect.w = surface_message->w;
+	message_rect.h = surface_message->h;
+
+
+	// Movement tracking
 	double t_lastXmove = 0;
 	double t_lastYmove = 0;
 	double t_lastRmove = 0;
+
+	// Set up needed game elements
 	InputWomanager inputwoman;
 	Board board(w_width, w_height);
 	Tetromino tet;
 	place_piece(&board, &tet);
-
 	Clock clock;
 	double t = clock.TNow();
 	double dT = Clock::dT60Fps;
 
+	// Launch window game loop
 	bool fRunWindow = true;
 	while (fRunWindow)
 	{
@@ -265,13 +283,15 @@ int main(int cpChz, char** apChzArg)
 		}
 
 		// Statefully set the color of the next render operation to pink
-
 		SDL_ERRCHECK(SDL_SetRenderDrawColor(pRenderer, 0xFF, 0x00, 0xFF, 0xFF));
 
 		// Clear the entire screen to the last set render draw color
-
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
 
+		// Render Text
+		SDL_RenderCopy(pRenderer, message, NULL, &message_rect);
+
+		// Play Game Loop
 		play_game(&board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
