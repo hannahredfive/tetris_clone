@@ -202,6 +202,15 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	}
 }
 
+void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer *pRenderer, InputWomanager* inputwoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove)
+{
+	// Draw board in the window
+	pboard->Draw(pRenderer);
+
+	// Update piece
+	update_piece(inputwoman, pboard, ptet, t, pt_lastXmove, pt_lastYmove, pt_lastRmove);
+}
+
 
 int main(int cpChz, char** apChzArg)
 {
@@ -263,11 +272,7 @@ int main(int cpChz, char** apChzArg)
 
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
 
-		// Draw board in the window
-		board.Draw(pRenderer);
-		
-		// Update piece
-		update_piece(&inputwoman, &board, &tet, t, &t_lastXmove, &t_lastYmove, &t_lastRmove);
+		play_game(&board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
