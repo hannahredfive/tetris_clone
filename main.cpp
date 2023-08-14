@@ -311,6 +311,8 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 		if (pInputWoman->IsButtonDown(InputType::EnterKey))
 		{
 			*pgamestate = StartMenu;
+			pboard->clear_board();
+			*pT_since_start = 0;
 		}
 
 		// Clean Up Text Rendering
