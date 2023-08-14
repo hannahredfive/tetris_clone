@@ -110,14 +110,6 @@ void update_piece(GameState* pgamestate, InputWomanager* pInputWoman, Board* pbo
 	// pickup piece
 	pickup_piece(pboard, ptet);
 
-	// Check for Game Over
-	if (pboard->is_game_over())
-	{
-		*pgamestate = GameOver;
-		// pboard->clear_board();
-		return;
-	}
-
 	// Get tet data
 	Position pos = ptet->get_pos();
 
@@ -181,9 +173,15 @@ void update_piece(GameState* pgamestate, InputWomanager* pInputWoman, Board* pbo
 			pos._y -= 1;
 			ptet->set_pos(pos._x, pos._y);
 			place_piece(pboard, ptet);
-			ptet->set_pos(3, 0);
 			pboard->check_rows();
 			ptet->change_color();
+
+			// Check for Game Over
+			if (pboard->is_game_over())
+			{
+				*pgamestate = GameOver;
+				return;
+			}
 		}
 		*pt_lastYmove = t;
 		place_piece(pboard, ptet);
@@ -202,9 +200,15 @@ void update_piece(GameState* pgamestate, InputWomanager* pInputWoman, Board* pbo
 			pos._y -= 1;
 			ptet->set_pos(pos._x, pos._y);
 			place_piece(pboard, ptet);
-			ptet->set_pos(3, 0);
 			pboard->check_rows();
 			ptet->change_color();
+
+			// Check for Game Over
+			if (pboard->is_game_over())
+			{
+				*pgamestate = GameOver;
+				return;
+			}
 		}
 		*pt_lastYmove = t;
 		place_piece(pboard, ptet);
@@ -382,7 +386,6 @@ int main(int cpChz, char** apChzArg)
 	InputWomanager inputwoman;
 	Board board(w_width, w_height);
 	Tetromino tet;
-	// place_piece(&board, &tet);
 	Clock clock;
 	double t = clock.TNow();
 	double dT = Clock::dT60Fps;
