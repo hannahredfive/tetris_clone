@@ -203,7 +203,38 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	}
 }
 
-void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer *pRenderer, InputWomanager* inputwoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* font, SDL_Color color)
+void start_menu(SDL_Renderer* pRenderer, TTF_Font* title_font, SDL_Color title_color, TTF_Font* instr_font, SDL_Color instr_color, InputWomanager* pinputwoman, int w_width, int w_height)
+{
+	// Start Game Title
+	SDL_Surface* surf_start_title = TTF_RenderText_Solid(title_font, "Hannah's Tetris Clone", title_color);
+	SDL_Texture* start_title = SDL_CreateTextureFromSurface(pRenderer, surf_start_title);
+	SDL_Rect start_title_rect;
+	start_title_rect.x = w_width / 2 - surf_start_title->w / 2;
+	start_title_rect.y = w_height / 2 - surf_start_title->h;
+	start_title_rect.w = surf_start_title->w;
+	start_title_rect.h = surf_start_title->h;
+
+	// Start Game Instructions
+	SDL_Surface* surf_start_inst = TTF_RenderText_Solid(instr_font, "Press spacebar to begin playing!", instr_color);
+	SDL_Texture* start_inst = SDL_CreateTextureFromSurface(pRenderer, surf_start_inst);
+	SDL_Rect start_inst_rect;
+	start_inst_rect.x = w_width / 2 - surf_start_inst->w / 2;
+	start_inst_rect.y = w_height / 2;
+	start_inst_rect.w = surf_start_inst->w;
+	start_inst_rect.h = surf_start_inst->h;
+
+	// Render Title & Instructions
+	SDL_RenderCopy(pRenderer, start_title, NULL, &start_title_rect);
+	SDL_RenderCopy(pRenderer, start_inst, NULL, &start_inst_rect);
+
+	//Clean up
+	SDL_DestroyTexture(start_title);
+	SDL_FreeSurface(surf_start_title);
+	SDL_DestroyTexture(start_inst);
+	SDL_FreeSurface(surf_start_inst);
+}
+
+void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pinputwoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* font, SDL_Color color)
 {
 	// Set up time tracker text
 	int mins_playing = int(t) / 60;
@@ -224,8 +255,8 @@ void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer *pRenderer, InputWom
 	// Draw board in the window
 	pboard->Draw(pRenderer);
 
-	// Update piece
-	update_piece(inputwoman, pboard, ptet, t, pt_lastXmove, pt_lastYmove, pt_lastRmove);
+	// Update piece data
+	update_piece(pinputwoman, pboard, ptet, t, pt_lastXmove, pt_lastYmove, pt_lastRmove);
 }
 
 
@@ -254,13 +285,20 @@ int main(int cpChz, char** apChzArg)
 	SDL_ASSERT(pRenderer);
 
 	// Font & Text Set-Up
-	TTF_Font* silkbold = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", 22);
-	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", 40);
+	TTF_Font* silkbold = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", w_width / 30);
+	TTF_Font* silkboldBIG = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", w_width / 20);
+	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 17);
+	TTF_Font* silksmall = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 28);
 	SDL_Color white = { 255, 255, 255, 255 };
+	SDL_Color purple = { 119, 88, 178, 255 };
+
+
+
+	// Gameplay Title
 	SDL_Surface* surface_title_message = TTF_RenderText_Solid(silkbold, "Hannah's Tetris Clone", white);
 	SDL_Texture* title_message = SDL_CreateTextureFromSurface(pRenderer, surface_title_message);
 	SDL_Rect title_message_rect;
-	title_message_rect.x = 680/2 - surface_title_message->w/2;
+	title_message_rect.x = w_width / 2 - surface_title_message->w/2;
 	title_message_rect.y = 5;
 	title_message_rect.w = surface_title_message->w;
 	title_message_rect.h = surface_title_message->h;
@@ -299,11 +337,16 @@ int main(int cpChz, char** apChzArg)
 		// Clear the entire screen to the last set render draw color
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
 
+		// Start Menu
+		start_menu(pRenderer, silkboldBIG, purple, silksmall, white, &inputwoman, w_width, w_height);
+
+		/*
 		// Render Title Text
 		SDL_RenderCopy(pRenderer, title_message, NULL, &title_message_rect);
 
 		// Play Game Loop
 		play_game(&board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove, silk, white);
+		*/
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
