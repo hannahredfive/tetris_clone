@@ -44,6 +44,10 @@ void InputWomanager::HandleEvent(SDL_Event e)
         case SDLK_SPACE:
             isDown[SpaceBar] = true;
             break;
+            
+        case SDLK_RETURN:
+            isDown[EnterKey] = true;
+            break;
         }
     }
 
@@ -71,6 +75,10 @@ void InputWomanager::HandleEvent(SDL_Event e)
 
         case SDLK_SPACE:
             isDown[SpaceBar] = false;
+            break;
+
+        case SDLK_RETURN:
+            isDown[EnterKey] = false;
             break;
         }
     }
