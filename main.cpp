@@ -22,6 +22,13 @@
 #define SDL_ASSERT(value) if (!(value)) { printf("Error! %s\n", SDL_GetError()); __debugbreak(); }
 #define SDL_ERRCHECK(value) if ((value) == -1) { printf("Error! %s\n", SDL_GetError()); __debugbreak(); }
 
+enum GameState
+{
+	StartMenu,
+	GamePlay,
+	GameOver,
+};
+
 
 bool collision(Board * pboard, Tetromino * ptet)
 {
@@ -98,15 +105,16 @@ void pickup_piece(Board* pboard, Tetromino* ptet)
 }
 
 
-void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove)
+void update_piece(GameState* pgamestate, InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove)
 {
 	// pickup piece
 	pickup_piece(pboard, ptet);
 
-	// Check for game over
+	// Check for Game Over
 	if (pboard->is_game_over())
 	{
-		pboard->clear_board();
+		*pgamestate = GameOver;
+		// pboard->clear_board();
 		return;
 	}
 
@@ -203,7 +211,7 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	}
 }
 
-void start_menu(SDL_Renderer* pRenderer, TTF_Font* title_font, SDL_Color title_color, TTF_Font* instr_font, SDL_Color instr_color, InputWomanager* pinputwoman, int w_width, int w_height)
+void start_menu(GameState* pgamestate, SDL_Renderer* pRenderer, TTF_Font* title_font, SDL_Color title_color, TTF_Font* instr_font, SDL_Color instr_color, InputWomanager* pInputWoman, int w_width, int w_height)
 {
 	// Start Game Title
 	SDL_Surface* surf_start_title = TTF_RenderText_Solid(title_font, "Hannah's Tetris Clone", title_color);
@@ -227,21 +235,37 @@ void start_menu(SDL_Renderer* pRenderer, TTF_Font* title_font, SDL_Color title_c
 	SDL_RenderCopy(pRenderer, start_title, NULL, &start_title_rect);
 	SDL_RenderCopy(pRenderer, start_inst, NULL, &start_inst_rect);
 
-	//Clean up
+	// Check for Spacebar Use
+	if (pInputWoman->IsButtonDown(InputType::SpaceBar))
+	{
+		*pgamestate = GamePlay;
+	}
+
+	// Clean up
 	SDL_DestroyTexture(start_title);
 	SDL_FreeSurface(surf_start_title);
 	SDL_DestroyTexture(start_inst);
 	SDL_FreeSurface(surf_start_inst);
 }
 
-void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pinputwoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* font, SDL_Color color)
+void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pInputWoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* time_font, SDL_Color time_color, TTF_Font* title_font, SDL_Color title_color, int w_width)
 {
-	// Set up time tracker text
+	// Gameplay Title
+	SDL_Surface* surface_title_message = TTF_RenderText_Solid(title_font, "Hannah's Tetris Clone", title_color);
+	SDL_Texture* title_message = SDL_CreateTextureFromSurface(pRenderer, surface_title_message);
+	SDL_Rect title_message_rect;
+	title_message_rect.x = w_width / 2 - surface_title_message->w / 2;
+	title_message_rect.y = 5;
+	title_message_rect.w = surface_title_message->w;
+	title_message_rect.h = surface_title_message->h;
+	SDL_RenderCopy(pRenderer, title_message, NULL, &title_message_rect);
+
+	// Set up Time Tracker text
 	int mins_playing = int(t) / 60;
 	int secs_playing = t - mins_playing * 60;
 	char chars[32];
 	sprintf_s(chars, "%02d:%02d", mins_playing, secs_playing);
-	SDL_Surface* surface_time_message = TTF_RenderText_Solid(font, chars, color);
+	SDL_Surface* surface_time_message = TTF_RenderText_Solid(time_font, chars, time_color);
 	SDL_Texture* time_message = SDL_CreateTextureFromSurface(pRenderer, surface_time_message);
 	SDL_Rect time_message_rect;
 	time_message_rect.x = 120 - surface_time_message->w / 2;
@@ -249,14 +273,23 @@ void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWom
 	time_message_rect.w = surface_time_message->w;
 	time_message_rect.h = surface_time_message->h;
 	SDL_RenderCopy(pRenderer, time_message, NULL, &time_message_rect);
-	SDL_DestroyTexture(time_message);
-	SDL_FreeSurface(surface_time_message);
 
 	// Draw board in the window
 	pboard->Draw(pRenderer);
 
 	// Update piece data
-	update_piece(pinputwoman, pboard, ptet, t, pt_lastXmove, pt_lastYmove, pt_lastRmove);
+	update_piece(pgamestate, pInputWoman, pboard, ptet, t, pt_lastXmove, pt_lastYmove, pt_lastRmove);
+	
+	// Clean Up Text Rendering
+	SDL_DestroyTexture(title_message);
+	SDL_FreeSurface(surface_title_message);
+	SDL_DestroyTexture(time_message);
+	SDL_FreeSurface(surface_time_message);
+}
+
+void game_over()
+{
+
 }
 
 
@@ -284,7 +317,7 @@ int main(int cpChz, char** apChzArg)
 	SDL_Renderer* pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	SDL_ASSERT(pRenderer);
 
-	// Font & Text Set-Up
+	// Font & Color Set Up
 	TTF_Font* silkbold = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", w_width / 30);
 	TTF_Font* silkboldBIG = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", w_width / 20);
 	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 17);
@@ -292,23 +325,13 @@ int main(int cpChz, char** apChzArg)
 	SDL_Color white = { 255, 255, 255, 255 };
 	SDL_Color purple = { 119, 88, 178, 255 };
 
-
-
-	// Gameplay Title
-	SDL_Surface* surface_title_message = TTF_RenderText_Solid(silkbold, "Hannah's Tetris Clone", white);
-	SDL_Texture* title_message = SDL_CreateTextureFromSurface(pRenderer, surface_title_message);
-	SDL_Rect title_message_rect;
-	title_message_rect.x = w_width / 2 - surface_title_message->w/2;
-	title_message_rect.y = 5;
-	title_message_rect.w = surface_title_message->w;
-	title_message_rect.h = surface_title_message->h;
-
 	// Movement tracking
 	double t_lastXmove = 0;
 	double t_lastYmove = 0;
 	double t_lastRmove = 0;
 
 	// Set up needed game elements
+	GameState gamestate = StartMenu;
 	InputWomanager inputwoman;
 	Board board(w_width, w_height);
 	Tetromino tet;
@@ -337,22 +360,25 @@ int main(int cpChz, char** apChzArg)
 		// Clear the entire screen to the last set render draw color
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
 
-		// Start Menu
-		start_menu(pRenderer, silkboldBIG, purple, silksmall, white, &inputwoman, w_width, w_height);
+		// Based on GameState switch between game modes
+		switch (gamestate)
+		{
+		case StartMenu:
+			start_menu(&gamestate, pRenderer, silkboldBIG, purple, silksmall, white, &inputwoman, w_width, w_height);
+			break;
 
-		/*
-		// Render Title Text
-		SDL_RenderCopy(pRenderer, title_message, NULL, &title_message_rect);
+		case GamePlay:
+			play_game(&gamestate, &board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove, silk, white, silkbold, purple, w_width);
+			break;
 
-		// Play Game Loop
-		play_game(&board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove, silk, white);
-		*/
+		case GameOver:
+			game_over();
+			break;
+		}
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
 
 		t = clock.TNow();
 	}
-	SDL_DestroyTexture(title_message);
-	SDL_FreeSurface(surface_title_message);
 }
