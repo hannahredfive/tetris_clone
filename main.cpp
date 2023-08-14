@@ -307,6 +307,12 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 		game_over_rect.h = surface_game_over->h;
 		SDL_RenderCopy(pRenderer, game_over, NULL, &game_over_rect);
 
+		// Check for EnterKey Use
+		if (pInputWoman->IsButtonDown(InputType::EnterKey))
+		{
+			*pgamestate = StartMenu;
+		}
+
 		// Clean Up Text Rendering
 		SDL_DestroyTexture(game_over);
 		SDL_FreeSurface(surface_game_over);
