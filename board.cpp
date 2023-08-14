@@ -104,31 +104,59 @@ void Board::Draw(SDL_Renderer *renderer)
 				break;
 			
 			case orange:
-				SDL_SetRenderDrawColor(renderer, 255, 125, 0, 255);
+				// new 
+				SDL_SetRenderDrawColor(renderer, 238, 108, 77, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 255, 125, 0, 255);
 				break;
 
 			case blue:
-				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+				// new 
+				SDL_SetRenderDrawColor(renderer, 61, 90, 128, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 				break;
 
 			case yellow:
-				SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+				// new 
+				SDL_SetRenderDrawColor(renderer, 233, 196, 106, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
 				break;
 
 			case cyan:
-				SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+				// new 
+				SDL_SetRenderDrawColor(renderer, 152, 193, 217, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 				break;
 
 			case green:
-				SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+				// new 
+				SDL_SetRenderDrawColor(renderer, 82, 121, 111, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 				break;
 
 			case purple:
-				SDL_SetRenderDrawColor(renderer, 160, 0, 255, 255);
+				// new 
+				SDL_SetRenderDrawColor(renderer, 147, 96, 121, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 160, 0, 255, 255);
 				break;
 
 			case red:
-				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+				// new red
+				SDL_SetRenderDrawColor(renderer, 101, 37, 64, 255);
+
+				// old
+				// SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 				break;
 			}
 
