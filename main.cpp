@@ -248,7 +248,7 @@ void start_menu(GameState* pgamestate, SDL_Renderer* pRenderer, TTF_Font* title_
 	SDL_FreeSurface(surf_start_inst);
 }
 
-void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pInputWoman, float* pT_since_start, double dT, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* controls_font, TTF_Font* time_font, SDL_Color time_color, TTF_Font* title_font, SDL_Color title_color, TTF_Font* game_over_font, SDL_Color game_over_color, int w_width, int w_height)
+void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pInputWoman, float& t_since_start, double dT, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* controls_font, TTF_Font* time_font, SDL_Color time_color, TTF_Font* title_font, SDL_Color title_color, TTF_Font* game_over_font, SDL_Color game_over_color, int w_width, int w_height)
 {
 	// Gameplay Title
 	SDL_Surface* surface_title_message = TTF_RenderText_Solid(title_font, "Hannah's Tetris Clone", title_color);
@@ -261,8 +261,8 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 	SDL_RenderCopy(pRenderer, title_message, NULL, &title_message_rect);
 
 	// Set up Time Tracker text
-	int mins_playing = int(*pT_since_start) / 60;
-	int secs_playing = *pT_since_start - mins_playing * 60;
+	int mins_playing = int(t_since_start) / 60;
+	int secs_playing = t_since_start - mins_playing * 60;
 	char chars[32];
 	sprintf_s(chars, "%02d:%02d", mins_playing, secs_playing);
 	SDL_Surface* surface_time_message = TTF_RenderText_Solid(time_font, chars, time_color);
@@ -292,8 +292,8 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 	// Update piece data if in GamePlay state
 	if (*pgamestate == GamePlay)
 	{
-		*pT_since_start += 1.0 / 60.0;
-		update_piece(pgamestate, pInputWoman, pboard, ptet, *pT_since_start, pt_lastXmove, pt_lastYmove, pt_lastRmove);
+		t_since_start += 1.0 / 60.0;
+		update_piece(pgamestate, pInputWoman, pboard, ptet, t_since_start, pt_lastXmove, pt_lastYmove, pt_lastRmove);
 	}
 	else
 	{
@@ -312,7 +312,10 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 		{
 			*pgamestate = StartMenu;
 			pboard->clear_board();
-			*pT_since_start = 0;
+			t_since_start = 0;
+			*pt_lastXmove = 0; 
+			*pt_lastYmove = 0; 
+			*pt_lastRmove = 0;
 		}
 
 		// Clean Up Text Rendering
@@ -365,11 +368,13 @@ int main(int cpChz, char** apChzArg)
 	SDL_Color purple = { 119, 88, 178, 255 };
 
 	// Movement tracking
+	// game time
 	double t_lastXmove = 0;
 	double t_lastYmove = 0;
 	double t_lastRmove = 0;
 
 	// Time in game tracking
+	// game time
 	float t_since_start = 0.0;
 
 	// Set up needed game elements
@@ -377,7 +382,7 @@ int main(int cpChz, char** apChzArg)
 	InputWomanager inputwoman;
 	Board board(w_width, w_height);
 	Tetromino tet;
-	place_piece(&board, &tet);
+	// place_piece(&board, &tet);
 	Clock clock;
 	double t = clock.TNow();
 	double dT = Clock::dT60Fps;
@@ -411,7 +416,7 @@ int main(int cpChz, char** apChzArg)
 
 		case GameOver:
 		case GamePlay:
-			play_game(&gamestate, &board, &tet, pRenderer, &inputwoman, &t_since_start, dT, &t_lastXmove, &t_lastYmove, &t_lastRmove, silksmaller, silk, white, silkbold, purple, silkboldHUGE, white, w_width, w_height);
+			play_game(&gamestate, &board, &tet, pRenderer, &inputwoman, t_since_start, dT, &t_lastXmove, &t_lastYmove, &t_lastRmove, silksmaller, silk, white, silkbold, purple, silkboldHUGE, white, w_width, w_height);
 			break;
 		}
 
