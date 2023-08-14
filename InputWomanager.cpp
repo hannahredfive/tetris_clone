@@ -40,6 +40,10 @@ void InputWomanager::HandleEvent(SDL_Event e)
         case SDLK_RIGHT:
             isDown[RightArrow] = true;
             break;
+
+        case SDLK_SPACE:
+            isDown[SpaceBar] = true;
+            break;
         }
     }
 
@@ -63,6 +67,10 @@ void InputWomanager::HandleEvent(SDL_Event e)
 
         case SDLK_RIGHT:
             isDown[RightArrow] = false;
+            break;
+
+        case SDLK_SPACE:
+            isDown[SpaceBar] = false;
             break;
         }
     }

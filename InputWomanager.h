@@ -7,6 +7,7 @@ enum InputType
 	DownArrow,
 	LeftArrow,
 	RightArrow,
+	SpaceBar,
 
 	InputTypeMax,
 };
