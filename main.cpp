@@ -248,7 +248,7 @@ void start_menu(GameState* pgamestate, SDL_Renderer* pRenderer, TTF_Font* title_
 	SDL_FreeSurface(surf_start_inst);
 }
 
-void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pInputWoman, float* pT_since_start, double dT, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* time_font, SDL_Color time_color, TTF_Font* title_font, SDL_Color title_color, TTF_Font* game_over_font, SDL_Color game_over_color, int w_width, int w_height)
+void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Renderer* pRenderer, InputWomanager* pInputWoman, float* pT_since_start, double dT, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* controls_font, TTF_Font* time_font, SDL_Color time_color, TTF_Font* title_font, SDL_Color title_color, TTF_Font* game_over_font, SDL_Color game_over_color, int w_width, int w_height)
 {
 	// Gameplay Title
 	SDL_Surface* surface_title_message = TTF_RenderText_Solid(title_font, "Hannah's Tetris Clone", title_color);
@@ -268,11 +268,23 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 	SDL_Surface* surface_time_message = TTF_RenderText_Solid(time_font, chars, time_color);
 	SDL_Texture* time_message = SDL_CreateTextureFromSurface(pRenderer, surface_time_message);
 	SDL_Rect time_message_rect;
+	// 200 = board total width
 	time_message_rect.x = 120 - surface_time_message->w / 2;
 	time_message_rect.y = w_height / 2 - surface_time_message->h / 2;
 	time_message_rect.w = surface_time_message->w;
 	time_message_rect.h = surface_time_message->h;
 	SDL_RenderCopy(pRenderer, time_message, NULL, &time_message_rect);
+
+	// Set up Controller Instructions text
+	SDL_Surface* surface_controls = TTF_RenderText_Blended_Wrapped(controls_font, "^ = Rotate\n< = Move Left\n> = Move Right\nv = Fall Fast", time_color, 0);
+	SDL_Texture* controls = SDL_CreateTextureFromSurface(pRenderer, surface_controls);
+	SDL_Rect controls_rect;
+	// 200 = board total width
+	controls_rect.x = 560 - surface_controls->w / 2;
+	controls_rect.y = w_height / 2 - surface_controls->h / 2;
+	controls_rect.w = surface_controls->w;
+	controls_rect.h = surface_controls->h;
+	SDL_RenderCopy(pRenderer, controls, NULL, &controls_rect);
 
 	// Draw board in the window
 	pboard->Draw(pRenderer);
@@ -305,6 +317,8 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 	SDL_FreeSurface(surface_title_message);
 	SDL_DestroyTexture(time_message);
 	SDL_FreeSurface(surface_time_message);
+	SDL_DestroyTexture(controls);
+	SDL_FreeSurface(surface_controls);
 }
 
 
@@ -338,6 +352,7 @@ int main(int cpChz, char** apChzArg)
 	TTF_Font* silkboldHUGE = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", w_width / 10);
 	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 17);
 	TTF_Font* silksmall = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 28);
+	TTF_Font* silksmaller = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 34);
 	SDL_Color white = { 255, 255, 255, 255 };
 	SDL_Color purple = { 119, 88, 178, 255 };
 
@@ -388,7 +403,7 @@ int main(int cpChz, char** apChzArg)
 
 		case GameOver:
 		case GamePlay:
-			play_game(&gamestate, &board, &tet, pRenderer, &inputwoman, &t_since_start, dT, &t_lastXmove, &t_lastYmove, &t_lastRmove, silk, white, silkbold, purple, silkboldHUGE, white, w_width, w_height);
+			play_game(&gamestate, &board, &tet, pRenderer, &inputwoman, &t_since_start, dT, &t_lastXmove, &t_lastYmove, &t_lastRmove, silksmaller, silk, white, silkbold, purple, silkboldHUGE, white, w_width, w_height);
 			break;
 		}
 
@@ -396,7 +411,6 @@ int main(int cpChz, char** apChzArg)
 		SDL_RenderPresent(pRenderer);
 
 		// Maintain DT
-
 		double tNew;
 		do
 		{
