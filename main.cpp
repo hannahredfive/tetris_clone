@@ -203,8 +203,24 @@ void update_piece(InputWomanager* pInputWoman, Board* pboard, Tetromino* ptet, d
 	}
 }
 
-void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer *pRenderer, InputWomanager* inputwoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove)
+void play_game(Board* pboard, Tetromino* ptet, SDL_Renderer *pRenderer, InputWomanager* inputwoman, double t, double* pt_lastXmove, double* pt_lastYmove, double* pt_lastRmove, TTF_Font* font, SDL_Color color)
 {
+	// Set up time tracker text
+	int mins_playing = int(t) / 60;
+	int secs_playing = t - mins_playing * 60;
+	char chars[32];
+	sprintf_s(chars, "%02d:%02d", mins_playing, secs_playing);
+	SDL_Surface* surface_time_message = TTF_RenderText_Solid(font, chars, color);
+	SDL_Texture* time_message = SDL_CreateTextureFromSurface(pRenderer, surface_time_message);
+	SDL_Rect time_message_rect;
+	time_message_rect.x = 120 - surface_time_message->w / 2;
+	time_message_rect.y = 480 / 2 - surface_time_message->h / 2;
+	time_message_rect.w = surface_time_message->w;
+	time_message_rect.h = surface_time_message->h;
+	SDL_RenderCopy(pRenderer, time_message, NULL, &time_message_rect);
+	SDL_DestroyTexture(time_message);
+	SDL_FreeSurface(surface_time_message);
+
 	// Draw board in the window
 	pboard->Draw(pRenderer);
 
@@ -223,12 +239,10 @@ int main(int cpChz, char** apChzArg)
 	(void)apChzArg;
 
 	// Initialize SDL
-
 	SDL_ERRCHECK(SDL_Init(SDL_INIT_VIDEO));
 	SDL_ERRCHECK(TTF_Init());
 
 	// Create a window with dimensions as defined by width & height
-
 	int w_width = 680;
 	int w_height = 480;
 
@@ -236,22 +250,20 @@ int main(int cpChz, char** apChzArg)
 	SDL_ASSERT(pWindow);
 
 	// Create an accelerated renderer we can draw to
-
 	SDL_Renderer* pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	SDL_ASSERT(pRenderer);
 
 	// Font & Text Set-Up
 	TTF_Font* silkbold = TTF_OpenFont("fonts\\Silkscreen-Bold.ttf", 22);
-	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", 22);
+	TTF_Font* silk = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", 40);
 	SDL_Color white = { 255, 255, 255, 255 };
-	SDL_Surface* surface_message = TTF_RenderText_Solid(silkbold, "Hannah's Tetris Clone", white);
-	SDL_Texture* message = SDL_CreateTextureFromSurface(pRenderer, surface_message);
-	SDL_Rect message_rect;
-	message_rect.x = 680/2 - surface_message->w/2;
-	message_rect.y = 5;
-	message_rect.w = surface_message->w;
-	message_rect.h = surface_message->h;
-
+	SDL_Surface* surface_title_message = TTF_RenderText_Solid(silkbold, "Hannah's Tetris Clone", white);
+	SDL_Texture* title_message = SDL_CreateTextureFromSurface(pRenderer, surface_title_message);
+	SDL_Rect title_message_rect;
+	title_message_rect.x = 680/2 - surface_title_message->w/2;
+	title_message_rect.y = 5;
+	title_message_rect.w = surface_title_message->w;
+	title_message_rect.h = surface_title_message->h;
 
 	// Movement tracking
 	double t_lastXmove = 0;
@@ -272,7 +284,6 @@ int main(int cpChz, char** apChzArg)
 	while (fRunWindow)
 	{
 		// Check for any events the OS might have sent us, such as requesting the app close
-
 		SDL_Event event;
 		while (SDL_PollEvent(&event) != 0)
 		{
@@ -282,21 +293,23 @@ int main(int cpChz, char** apChzArg)
 				inputwoman.HandleEvent(event);
 		}
 
-		// Statefully set the color of the next render operation to pink
+		// Statefully set the color of the next render operation to a pale sage green
 		SDL_ERRCHECK(SDL_SetRenderDrawColor(pRenderer, 132, 169, 140, 255));
 
 		// Clear the entire screen to the last set render draw color
 		SDL_ERRCHECK(SDL_RenderClear(pRenderer));
 
-		// Render Text
-		SDL_RenderCopy(pRenderer, message, NULL, &message_rect);
+		// Render Title Text
+		SDL_RenderCopy(pRenderer, title_message, NULL, &title_message_rect);
 
 		// Play Game Loop
-		play_game(&board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove);
+		play_game(&board, &tet, pRenderer, &inputwoman, t, &t_lastXmove, &t_lastYmove, &t_lastRmove, silk, white);
 
 		// Present the current state of the renderer to the window to be displayed by the OS
 		SDL_RenderPresent(pRenderer);
 
 		t = clock.TNow();
 	}
+	SDL_DestroyTexture(title_message);
+	SDL_FreeSurface(surface_title_message);
 }
