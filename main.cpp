@@ -311,6 +311,16 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 		game_over_rect.h = surface_game_over->h;
 		SDL_RenderCopy(pRenderer, game_over, NULL, &game_over_rect);
 
+		// Return to Start Menu Instructions Text
+		SDL_Surface* surface_return_message = TTF_RenderText_Blended(controls_font, "Press ENTER to return to the start menu!", time_color);
+		SDL_Texture* return_message = SDL_CreateTextureFromSurface(pRenderer, surface_return_message);
+		SDL_Rect return_message_rect;
+		return_message_rect.x = w_width / 2 - surface_return_message->w / 2;
+		return_message_rect.y = (w_height / 4) * 3 - surface_return_message->h / 2;
+		return_message_rect.w = surface_return_message->w;
+		return_message_rect.h = surface_return_message->h;
+		SDL_RenderCopy(pRenderer, return_message, NULL, &return_message_rect);
+
 		// Check for EnterKey Use
 		if (pInputWoman->IsButtonDown(InputType::EnterKey))
 		{
@@ -325,6 +335,8 @@ void play_game(GameState* pgamestate, Board* pboard, Tetromino* ptet, SDL_Render
 		// Clean Up Text Rendering
 		SDL_DestroyTexture(game_over);
 		SDL_FreeSurface(surface_game_over);
+		SDL_DestroyTexture(return_message);
+		SDL_FreeSurface(surface_return_message);
 	}
 	
 	// Clean Up Text Rendering
