@@ -104,59 +104,41 @@ void Board::Draw(SDL_Renderer *renderer)
 				break;
 			
 			case orange:
-				// new 
-				SDL_SetRenderDrawColor(renderer, 238, 108, 77, 255);
+				// salmon pink
+				SDL_SetRenderDrawColor(renderer, 193, 110, 112, 255);
 
-				// old
-				// SDL_SetRenderDrawColor(renderer, 255, 125, 0, 255);
+				// muted orange
+				// SDL_SetRenderDrawColor(renderer, 255, 171, 96, 255);
 				break;
 
 			case blue:
-				// new 
+				// slightly deep dusty blue
 				SDL_SetRenderDrawColor(renderer, 61, 90, 128, 255);
-
-				// old
-				// SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 				break;
 
 			case yellow:
-				// new 
+				// soft mustard yellow
 				SDL_SetRenderDrawColor(renderer, 233, 196, 106, 255);
-
-				// old
-				// SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
 				break;
 
 			case cyan:
-				// new 
+				// pale blue
 				SDL_SetRenderDrawColor(renderer, 152, 193, 217, 255);
-
-				// old
-				// SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 				break;
 
 			case green:
-				// new 
-				SDL_SetRenderDrawColor(renderer, 82, 121, 111, 255);
-
-				// old
-				// SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+				// forrest green
+				SDL_SetRenderDrawColor(renderer, 2, 60, 64, 255);
 				break;
 
 			case purple:
-				// new 
-				SDL_SetRenderDrawColor(renderer, 147, 96, 121, 255);
-
-				// old
-				// SDL_SetRenderDrawColor(renderer, 160, 0, 255, 255);
+				// dusty purple
+				SDL_SetRenderDrawColor(renderer, 115, 93, 130, 255);
 				break;
 
 			case red:
-				// new red
+				// wine red
 				SDL_SetRenderDrawColor(renderer, 101, 37, 64, 255);
-
-				// old
-				// SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 				break;
 			}
 
