@@ -381,7 +381,8 @@ int main(int cpChz, char** apChzArg)
 	TTF_Font* silksmall = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 28);
 	TTF_Font* silksmaller = TTF_OpenFont("fonts\\Silkscreen-Regular.ttf", w_width / 34);
 	SDL_Color white = { 255, 255, 255, 255 };
-	SDL_Color purple = { 119, 88, 178, 255 };
+	SDL_Color purple = { 115, 93, 130, 255 };
+	// SDL_Color purple = { 119, 88, 178, 255 };
 
 	// Movement tracking
 	// game time
